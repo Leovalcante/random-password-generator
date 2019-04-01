@@ -8,7 +8,7 @@
 ## Installation
 1. `git clone https://github.com/Leovalcante/random-password-generator`
 2. `cd random-password-generator`
-3. `./run_install`
+3. `./install.sh`
 
 
 ## Usage
