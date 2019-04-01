@@ -3,6 +3,7 @@ import string
 import sys
 import random
 import click
+from math import log
 from random_password_generator import __version__, __name_desc__
 
 
@@ -26,7 +27,17 @@ def rpg(pass_length: int, number: int) -> None:
         number = 1
 
     for n in range(number):
-        click.echo(_generate_random_password(pass_length))
+        pw = _generate_random_password(pass_length)
+        click.echo("Password: {}".format(pw))
+
+    click.echo("\nThe entropy of generated password is: {}".format(_calculate_entropy(pass_length)))
+    click.echo("""
+Password strength is determined with this chart:
+< 28 bits\t= Very Weak; might keep out family members
+28 - 35 bits\t= Weak; should keep out most people, often good for desktop login passwords
+36 - 59 bits\t= Reasonable; fairly secure passwords for network and company passwords
+60 - 127 bits\t= Strong; can be good for guarding financial information
+128+ bits\t= Very Strong; often overkill""")
 
 
 def _generate_random_password(length: int) -> str:
@@ -48,6 +59,21 @@ def _generate_random_password(length: int) -> str:
 
     random.shuffle(pw)
     return "".join(pw)
+
+
+def _calculate_entropy(pw_len: int) -> float:
+    """
+    Calculate password entropy
+
+    :param int pw_len: password length
+    :return int: calculated entropy
+    """
+    # E = log_2(R^L), R = pool of unique char, L = password length
+    chars_pool = len(string.ascii_lowercase) + len(string.ascii_uppercase) + len(string.digits) + len(
+        string.punctuation)
+    entropy = log(chars_pool ** pw_len, 2)
+
+    return entropy
 
 
 # MAIN
