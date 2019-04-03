@@ -17,8 +17,9 @@ Password strength is determined with this chart:
 
 @click.command(context_settings={'help_option_names': ['-h', '--help']})
 @click.argument("pass_length", type=click.IntRange(12, 90), metavar="<pass-length>")
-@click.option("-n", "number", type=int, default=1, help="Number of password to generate.", metavar="<int>")
-@click.option("-o", "output", type=click.File("w"), help="Output file.", metavar="<out-file>")
+@click.option("-n", "--number", "number", type=int, default=1, help="Number of password to generate.",
+              metavar="<pass-number>")
+@click.option("-o", "--output", "output", type=click.File("w"), help="Output file.", metavar="<out-file>")
 @click.option("-nL", "--no-lower", "lower", is_flag=True, help="Remove lower-case characters.")
 @click.option("-nU", "--no-upper", "upper", is_flag=True, help="Remove upper-case characters.")
 @click.option("-nD", "--no-digits", "digits", is_flag=True, help="Remove digits characters.")
