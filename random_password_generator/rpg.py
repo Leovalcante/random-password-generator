@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
 import string
-import sys
 import random
 import click
 from math import log
 from random_password_generator import __version__, __name_desc__
 
 
-@click.command()
+@click.command(context_settings={'help_option_names': ['-h', '--help']})
 @click.argument("pass_length", type=int, metavar="<pass-length>")
 @click.option("-n", "number", type=int, help="Number of password to generate.", metavar="<int>")
 @click.option("-o", "output", type=click.File("w"), help="Output file.", metavar="<out-file>")
-@click.version_option(__version__, prog_name=__name_desc__)
+@click.version_option(__version__, "-v", "--version", prog_name=__name_desc__)
 def rpg(pass_length: int, number: int, output: click.File) -> None:
     """
     Generate random complex password
@@ -31,9 +30,10 @@ def rpg(pass_length: int, number: int, output: click.File) -> None:
     if output:
         output.write("Passwords:\n")
 
+    click.echo("Passwords:")
     for n in range(number):
         pw = _generate_random_password(pass_length)
-        click.echo("Password: {}".format(pw))
+        click.echo(pw)
 
         if output:
             output.write("{}\n".format(pw))
@@ -89,4 +89,4 @@ def _calculate_entropy(pw_len: int) -> float:
 
 # MAIN
 if __name__ == "__main__":
-    rpg(sys.argv[1:])
+    rpg()
