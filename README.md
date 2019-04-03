@@ -22,8 +22,8 @@ In our opinion you should never use a password lower then 16 characters.
 
 - `-n <int>`: with this option you can generate *n* password
 - `-o <out-file>`: with this option you can write generated passwords into `<out-file>`
-- `--version`: to print out rpg version
-- `--help`: to print help text
+- `-v`, `--version`: to print out rpg version
+- `-h`, `--help`: to print help text
 
 ## Examples
 Generate a 16 character password:

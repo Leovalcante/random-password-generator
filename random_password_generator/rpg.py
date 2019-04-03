@@ -13,7 +13,7 @@ from random_password_generator import __version__, __name_desc__
 @click.version_option(__version__, "-v", "--version", prog_name=__name_desc__)
 def rpg(pass_length: int, number: int, output: click.File) -> None:
     """
-    Generate random complex password
+    Generate random complex password.
     \f
 
     :param int pass_length: desire password length
