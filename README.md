@@ -20,63 +20,73 @@ In our opinion you should never use a password lower then 16 characters.
 
 `[OPTIONS]` are:
 
-- `-n <int>`: with this option you can generate *n* password
-- `-o <out-file>`: with this option you can write generated passwords into `<out-file>`
-- `-v`, `--version`: to print out rpg version
-- `-h`, `--help`: to print help text
+- `-n, --number <pass-number>`: generate `<pass-number>` passwords
+- `-o, --output <out-file>`: write generated passwords into `<out-file>`
+- `-nL, --no-lower`: remove lower-case charsets 
+- `-nU, --no-upper`: remove upper-case charsets
+- `-nD, --no-digits`: remove digits charsets
+- `-nP, --no-punctuation`: remove punctuation charsets
+- `-v, --verbose`: print verbose output
+- `-V, --version`: print rpg version
+- `-h, --help`: print help text
 
 ## Examples
 Generate a 16 character password:
 ```
 $ rpg 16
-
-5;K6]V%h]ewW8N5i
+Passwords:
+6=L!Sda7~7xU5V@m
 
 The entropy of generated password is: 104.8734216268422
 ```
 
-Generate a 20 character password
+Generate a 20 character password without lower-case charsets
 ```
 $ rpg 20
 
-:6#T^ioVY9"RaQ7x3i7{
+Passwords:
+.T(89$!OPT4C{1088LS=
 
-The entropy of generated password is: 131.09177703355275
+The entropy of generated password is: 121.7492568250068
+
 ```
 
-Generate five 20 character passwords
+Generate five 20 character passwords without punctuation charsets
 ```
 $ rpg -n 5 20
 
-xb|b8$_03`yZ69T"wRHS
-^~|78IRyH]L3jq3fR'h0
-w9V>2vd2!%O53|sCy?GM
->01^7%zZx8X*lHb+sEV3
-74"2Vd17Z@hNUy__Pt/u
+Passwords:
+zW9z4974ciLgkP9hT3CC
+grX01Bd6MkQj01Y72dOa
+XtPmY88o2X87QaaA54bL
+dxhk9EYu7IJ4uS2d6Q66
+3Wr04RnOlV4h4c5Fvo6D
 
-The entropy of generated password is: 131.09177703355275
+The entropy of generated password is: 119.08392620773752
 ```
 
 Generate five 12 character passwords and save them into pw-out.txt
 ```
 $ rpg -n 5 -o pw-out.txt 12
-Password: 3%JK>pkV1=u7
-Password: (.71rVU9e`lQ
-Password: zeYHl~_3B;08
-Password: q,A(2wVu7Y9.
-Password: 7db2"P0%DFz{
+Passwords:
+.HHc'd2sK2\7
+Y5=3"da`W9aB
+60U">By<Z7db
+j9N4W5Tvu;'@
+8F,l<Oej6$M6
 
 The entropy of generated password is: 78.65506622013166
+
 ```
 *pw-out.txt*
 ```
 $ cat pw-out.txt 
 Passwords:
-3%JK>pkV1=u7
-(.71rVU9e`lQ
-zeYHl~_3B;08
-q,A(2wVu7Y9.
-7db2"P0%DFz{
+.HHc'd2sK2\7
+Y5=3"da`W9aB
+60U">By<Z7db
+j9N4W5Tvu;'@
+8F,l<Oej6$M6
 Entropy: 78.65506622013166
 ```
 
