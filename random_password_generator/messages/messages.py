@@ -2,6 +2,7 @@ import click
 
 
 class Prints:
+    """Prints class PRINTS messages in various format"""
     @staticmethod
     def emphasis(msg: str) -> None:
         """
@@ -56,6 +57,7 @@ class Prints:
 
 
 class Echoes:
+    """Echoes class RETURNS messages in various format"""
     @staticmethod
     def emphasis(msg: str) -> str:
         """
