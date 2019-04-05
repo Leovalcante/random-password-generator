@@ -13,7 +13,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     author="Valerio Preti",
-    author_email="valerio.preti.tpypi@gmail.com",
+    author_email="valerio.preti.rpg@gmail.com",
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
