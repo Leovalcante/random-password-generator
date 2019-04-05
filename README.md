@@ -1,14 +1,12 @@
 # Random Password Generator
-#### *rpg v1.0.0*
+#### *rpg v0.0.1*
 
 ## What is rpg?
 **Rpg** stands for **R**andom **P**assword **G**enerator, it's a utility command line tool that allows you to generate random entropic password.
 
 
 ## Installation
-1. `git clone https://github.com/Leovalcante/random-password-generator`
-2. `cd random-password-generator`
-3. `./install.sh`
+1. `pip install random-password-genrator-cli`
 
 
 ## Advice
