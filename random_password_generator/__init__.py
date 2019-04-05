@@ -1,5 +1,5 @@
-__name__ = "random-password-generator"
+__name__ = "random-password-generator-cli"
 __name_desc__ = "Random Password Generator"
 __version__ = "0.0.1"
-__description__ = "Utility command line tool to generate random entropic password"
+__description__ = "Command line tool utility to generate random entropic password"
 __url__ = "https://github.com/Leovalcante/random-password-generator"
