@@ -1,16 +1,20 @@
 # Random Password Generator
-#### *rpg v1.0.0*
+#### *rpg v0.0.1*
 
 ## What is rpg?
 **Rpg** stands for **R**andom **P**assword **G**enerator, it's a utility command line tool that allows you to generate random entropic password.
 
-## Requirements
-- Python 3+
 
 ## Installation
-1. `git clone https://github.com/Leovalcante/random-password-generator`
-2. `cd random-password-generator`
-3. `./run_install.sh`
+1. `pip install random-password-genrator-cli`
+
+
+## Advice
+1. Use rpg to generate random entropic password
+2. Check if your password has already been leaked here: [haveibeenpwned](https://haveibeenpwned.com/Passwords)
+3. Avoid to use a short password, try to use only passwords with 16+ characters.
+4. Do not share your passwords with any one.
+5. Do not reuse a password.
 
 
 ## Usage
@@ -22,40 +26,72 @@ In our opinion you should never use a password lower then 16 characters.
 
 `[OPTIONS]` are:
 
-- `--help`: to print help text
-- `--version`: to print out rpg version
-- `-n <int>`: with this option you can generate *n* password
+- `-n, --number <pass-number>`: generate `<pass-number>` passwords
+- `-o, --output <out-file>`: write generated passwords into `<out-file>`
+- `-nL, --no-lower`: remove lower-case charsets 
+- `-nU, --no-upper`: remove upper-case charsets
+- `-nD, --no-digits`: remove digits charsets
+- `-nP, --no-punctuation`: remove punctuation charsets
+- `-v, --verbose`: print verbose output
+- `-V, --version`: print rpg version
+- `-h, --help`: print help text
 
 ## Examples
 Generate a 16 character password:
 ```
 $ rpg 16
+Passwords:
+6=L!Sda7~7xU5V@m
 
-5;K6]V%h]ewW8N5i
+The entropy of generated password is: 104.8734216268422
 ```
 
-Generate a 20 character password
+Generate a 20 character password without lower-case charsets
 ```
 $ rpg 20
 
-:6#T^ioVY9"RaQ7x3i7{
+Passwords:
+.T(89$!OPT4C{1088LS=
+
+The entropy of generated password is: 121.7492568250068
+
 ```
 
-Generate five 20 character passwords
+Generate five 20 character passwords without punctuation charsets
 ```
 $ rpg -n 5 20
 
-xb|b8$_03`yZ69T"wRHS
-^~|78IRyH]L3jq3fR'h0
-w9V>2vd2!%O53|sCy?GM
->01^7%zZx8X*lHb+sEV3
-74"2Vd17Z@hNUy__Pt/u
+Passwords:
+zW9z4974ciLgkP9hT3CC
+grX01Bd6MkQj01Y72dOa
+XtPmY88o2X87QaaA54bL
+dxhk9EYu7IJ4uS2d6Q66
+3Wr04RnOlV4h4c5Fvo6D
+
+The entropy of generated password is: 119.08392620773752
 ```
 
+Generate five 12 character passwords and save them into pw-out.txt
+```
+$ rpg -n 5 -o pw-out.txt 12
+Passwords:
+.HHc'd2sK2\7
+Y5=3"da`W9aB
+60U">By<Z7db
+j9N4W5Tvu;'@
+8F,l<Oej6$M6
 
-## Advice
-1. Do not reuse a password.
-2. Avoid use of short password, try to use only 16+ character passwords.
-3. Do not share your passwords with any one.
-4. Check if your password has already been leaked here: [haveibeenpwned](https://haveibeenpwned.com/Passwords)
-5. Use rpg to generate random entropic password
+The entropy of generated password is: 78.65506622013166
+
+```
+*pw-out.txt*
+```
+$ cat pw-out.txt 
+Passwords:
+.HHc'd2sK2\7
+Y5=3"da`W9aB
+60U">By<Z7db
+j9N4W5Tvu;'@
+8F,l<Oej6$M6
+Entropy: 78.65506622013166
+```
