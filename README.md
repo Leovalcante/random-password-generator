@@ -11,6 +11,14 @@
 3. `./install.sh`
 
 
+## Advice
+1. Use rpg to generate random entropic password
+2. Check if your password has already been leaked here: [haveibeenpwned](https://haveibeenpwned.com/Passwords)
+3. Avoid to use a short password, try to use only passwords with 16+ characters.
+4. Do not share your passwords with any one.
+5. Do not reuse a password.
+
+
 ## Usage
 `rpg [OPTIONS] <pass-length>`
 
@@ -89,11 +97,3 @@ j9N4W5Tvu;'@
 8F,l<Oej6$M6
 Entropy: 78.65506622013166
 ```
-
-
-## Advice
-1. Do not reuse a password.
-2. Avoid use of short password, try to use only 16+ character passwords.
-3. Do not share your passwords with any one.
-4. Check if your password has already been leaked here: [haveibeenpwned](https://haveibeenpwned.com/Passwords)
-5. Use rpg to generate random entropic password
