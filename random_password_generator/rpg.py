@@ -16,7 +16,7 @@ Password strength is determined with this chart:
 
 
 @click.command(context_settings={'help_option_names': ['-h', '--help']})
-@click.argument("pass_length", type=click.IntRange(12, 90), metavar="<pass-length>")
+@click.argument("pass_length", type=int, metavar="<pass-length>")
 @click.option("-n", "--number", "number", type=int, default=1, help="Number of password to generate.",
               metavar="<pass-number>")
 @click.option("-o", "--output", "output", type=click.File("w"), help="Output file.", metavar="<out-file>")
@@ -42,12 +42,17 @@ def rpg(pass_length: int, number: int, output: click.File, lower: bool, upper: b
     :param bool verbose: print verbose output
     :return: None
     """
+    msg.Prints.verbose("Checking <pass-length> ({}) validity".format(pass_length), verbose)
+    if pass_length > 90 or pass_length < 12:
+        raise click.BadArgumentUsage(
+            msg.Echoes.error("Invalid value for \"<pass-length>\": 123 is not in the valid range of 12 to 90."))
+
     msg.Prints.verbose("Loading charsets", verbose)
 
     # Check at least one charsets type has been selected
     chars = _load_available_character(lower, upper, digits, punctuation)
 
-    msg.Prints.verbose("Charsets loaded\nChecking validity", verbose)
+    msg.Prints.verbose("Charsets loaded\nChecking charsets validity", verbose)
 
     if not chars:
         raise click.BadOptionUsage("--no-lower, --no-upper, --no-digits, --no-punctuation",
