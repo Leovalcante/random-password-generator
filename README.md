@@ -6,7 +6,7 @@
 
 
 ## Installation
-1. `pip install random-password-genrator-cli`
+1. `pip3 install random-password-genrator-cli`
 
 
 ## Advice
