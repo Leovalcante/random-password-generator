@@ -2,8 +2,10 @@
 import string
 import random
 import click
+import requests
 import random_password_generator.messages.messages as msg
 from math import log
+from hashlib import sha1
 from random_password_generator import __version__, __name_desc__
 
 _password_entropy_table = """
@@ -105,7 +107,13 @@ def _generate_random_password(length: int, charsets: list) -> str:
         pw.append(random.choice(charsets[i % chars]))
 
     random.shuffle(pw)
-    return "".join(pw)
+    pw = "".join(pw)
+
+    # Check if generated password is in a password leak
+    if _is_leaked_password(pw):
+        _generate_random_password(length, charsets)
+
+    return pw
 
 
 def _calculate_entropy(pw_len: int, charsets: list) -> float:
@@ -151,6 +159,26 @@ def _load_available_character(l: bool, u: bool, d: bool, p: bool) -> list:
         chars.append(string.punctuation)
 
     return chars
+
+
+def _is_leaked_password(pw):
+    hibp_api = "https://api.pwnedpasswords.com/range/{}"
+    headers = {
+        "user-agent": "random-password-generator-cli",
+        "api-version": "2"
+    }
+    hashed_pw = sha1(pw.encode('utf-8')).hexdigest()
+    pw_hash_prefix = hashed_pw[:5]
+    pw_hash_suffix = hashed_pw[5:]
+
+    req = requests.get(hibp_api.format(pw_hash_prefix), headers=headers)
+
+    for line in req.text.splitlines():
+        leaked_pw_hash = line.split(':')[0]
+        if leaked_pw_hash == pw_hash_suffix.upper():
+            return True
+
+    return False
 
 
 # MAIN
