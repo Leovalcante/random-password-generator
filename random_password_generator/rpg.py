@@ -44,11 +44,13 @@ def rpg(pass_length: int, number: int, output: click.File, lower: bool, upper: b
     :param bool verbose: print verbose output
     :return: None
     """
+    # Check pass_length validity
     msg.Prints.verbose("Checking <pass-length> ({}) validity".format(pass_length), verbose)
     if pass_length > 90 or pass_length < 12:
         raise click.BadArgumentUsage(
             msg.Echoes.error("Invalid value for \"<pass-length>\": 123 is not in the valid range of 12 to 90."))
 
+    # Check number validity
     msg.Prints.verbose("Checking <pass-number> ({}) validity".format(number), verbose)
     if number > 50:
         raise click.BadOptionUsage("number", msg.Echoes.error(
@@ -56,16 +58,18 @@ def rpg(pass_length: int, number: int, output: click.File, lower: bool, upper: b
 
     msg.Prints.verbose("Loading charsets", verbose)
 
-    # Check at least one charsets type has been selected
+    # Load charsets
     chars = _load_available_character(lower, upper, digits, punctuation)
 
     msg.Prints.verbose("Charsets loaded\nChecking charsets validity", verbose)
 
+    # Check at least one charsets type has been selected
     if not chars:
         raise click.BadOptionUsage("--no-lower, --no-upper, --no-digits, --no-punctuation",
                                    msg.Echoes.error("RPG needs at least one charsets type to generate password."))
     else:
         if lower or upper or digits or punctuation:
+            # User chose to not use any charsets, print warning message
             msg.Prints.warning("You are going to generate passwords without one or more of default charsets!")
             msg.Prints.warning(
                 "RPG cares a lot for your security, it's recommended to avoid this practice if possible!\n")
@@ -95,7 +99,7 @@ def rpg(pass_length: int, number: int, output: click.File, lower: bool, upper: b
 
 def _generate_random_password(length: int, charsets: list) -> str:
     """
-    Generate random password
+    Generate random password.
 
     :param int length: password length
     :param list charsets: available characters to use
@@ -123,7 +127,7 @@ def _generate_random_password(length: int, charsets: list) -> str:
 
 def _calculate_entropy(pw_len: int, charsets: list) -> float:
     """
-    Calculate password entropy
+    Calculate password entropy.
 
     :param int pw_len: password length
     :param list charsets: available characters to use
@@ -141,13 +145,13 @@ def _calculate_entropy(pw_len: int, charsets: list) -> float:
 
 def _load_available_character(l: bool, u: bool, d: bool, p: bool) -> list:
     """
-    Return available characters list
+    Return available characters list.
 
     :param bool l: should add lower-case characters
     :param bool u: should add upper-case characters
     :param bool d: should add digits
     :param bool p: should add punctuation
-    :return list:
+    :return list: available charsets list
     """
     chars = []
 
@@ -166,19 +170,28 @@ def _load_available_character(l: bool, u: bool, d: bool, p: bool) -> list:
     return chars
 
 
-def _is_leaked_password(pw):
-    # TODO: docstrings
+def _is_leaked_password(pw: str) -> bool:
+    """
+    Check whether a password has been previously leaked or not.
+
+    :param str pw: password to check
+    :return bool: True if password is in a "have i been pwned" leaks, False otherwise
+    """
     hibp_api = "https://api.pwnedpasswords.com/range/{}"
     headers = {
         "user-agent": "random-password-generator-cli",
         "api-version": "2"
     }
+
+    # Get the password hash
     hashed_pw = sha1(pw.encode('utf-8')).hexdigest()
     pw_hash_prefix = hashed_pw[:5]
     pw_hash_suffix = hashed_pw[5:]
 
+    # Query "have i been pwned"
     req = requests.get(hibp_api.format(pw_hash_prefix), headers=headers)
 
+    # Check if the password is safe
     for line in req.text.splitlines():
         leaked_pw_hash = line.split(':')[0]
         if leaked_pw_hash == pw_hash_suffix.upper():
