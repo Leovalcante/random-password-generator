@@ -167,6 +167,7 @@ def _load_available_character(l: bool, u: bool, d: bool, p: bool) -> list:
 
 
 def _is_leaked_password(pw):
+    # TODO: docstrings
     hibp_api = "https://api.pwnedpasswords.com/range/{}"
     headers = {
         "user-agent": "random-password-generator-cli",
@@ -189,3 +190,7 @@ def _is_leaked_password(pw):
 # MAIN
 if __name__ == "__main__":
     rpg()
+
+
+# TODO: loading with animation until all passwords are generated
+# TODO: util package
