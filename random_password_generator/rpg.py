@@ -19,7 +19,7 @@ Password strength is determined with this chart:
 
 @click.command(context_settings={'help_option_names': ['-h', '--help']})
 @click.argument("pass_length", type=int, metavar="<pass-length>")
-@click.option("-n", "--number", "number", type=int, default=1, help="Number of password to generate.",
+@click.option("-n", "--number", "number", type=int, default=1, help="Number of password to generate. (Max 50)",
               metavar="<pass-number>")
 @click.option("-o", "--output", "output", type=click.File("w"), help="Output file.", metavar="<out-file>")
 @click.option("-nL", "--no-lower", "lower", is_flag=True, help="Remove lower-case characters.")
@@ -48,6 +48,11 @@ def rpg(pass_length: int, number: int, output: click.File, lower: bool, upper: b
     if pass_length > 90 or pass_length < 12:
         raise click.BadArgumentUsage(
             msg.Echoes.error("Invalid value for \"<pass-length>\": 123 is not in the valid range of 12 to 90."))
+
+    msg.Prints.verbose("Checking <pass-number> ({}) validity".format(number), verbose)
+    if number > 50:
+        raise click.BadOptionUsage("number", msg.Echoes.error(
+            "Invalid value for \"<pass-number>\": the maximum value accepted is 50."))
 
     msg.Prints.verbose("Loading charsets", verbose)
 
