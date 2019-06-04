@@ -73,7 +73,7 @@ def rpg(pass_length: int, number: int, output: click.File, exclude_charsets: str
                 "RPG cares a lot for your security, it's recommended to avoid this practice if possible!\n")
 
     # Check if --no-safe option is in use, if so, print a warning message
-    if not no_safe:
+    if no_safe:
         msg.Prints.warning("You are going to generate passwords without checking if they have been already leaked!")
         msg.Prints.warning(
             "RPG cares a lot for your security, it's recommended to avoid this practice if possible!\n")
