@@ -153,7 +153,7 @@ def _sanitize_excluded_charsets(charsets_to_sanitize: str) -> set:
     """
     set_to_sanitize = set(charsets_to_sanitize.lower().split(","))
 
-    return set_to_sanitize - (set_to_sanitize - _available_charsets)
+    return set_to_sanitize & _available_charsets
 
 
 def _generate_random_password(length: int, charsets: list, no_safe: bool = False):
