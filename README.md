@@ -1,7 +1,7 @@
 # Random Password Generator
 
-![version](https://img.shields.io/badge/version-1.0.0-brightgreen.svg)
-![python required](https://img.shields.io/badge/python-3.7-blue.svg)
+[![version](https://img.shields.io/badge/version-1.0.0-brightgreen.svg)](https://github.com/Leovalcante/random-password-generator/releases/tag/v1.0.0)
+[![python required](https://img.shields.io/badge/python-3.7-blue.svg)]()
 
 ## What is rpg?
 **Rpg** stands for **R**andom **P**assword **G**enerator, it's a utility command line tool that allows you to generate random entropic and safe password. 
