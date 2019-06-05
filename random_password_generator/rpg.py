@@ -82,7 +82,7 @@ def rpg(pass_length: int, number: int, output: click.File, exclude_charsets: str
 
     # Print loading
     pw_list = []
-    with click.progressbar(length=number, label="Generating passwords") as pw_bar:
+    with click.progressbar(length=number, label="Generating passwords", show_pos=True) as pw_bar:
         for _ in pw_bar:
             pw = _generate_random_password(pass_length, chars, no_safe)
             if pw is not None:
