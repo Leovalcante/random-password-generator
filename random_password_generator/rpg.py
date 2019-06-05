@@ -92,25 +92,29 @@ def rpg(pass_length: int, number: int, output: click.File, exclude_charsets: str
                     "An error occurred while querying Have I Been Pwned API. Please retry or use --no-safe option"))
 
     # Print generated passwords
-    msg.Prints.emphasis("Passwords:")
     if output:
         output.write("Passwords:\n")
+    else:
+        msg.Prints.emphasis("Passwords:")
 
     for pw in pw_list:
-        msg.Prints.info(pw)
         if output:
             output.write("{}\n".format(pw))
+        else:
+            msg.Prints.info(pw)
 
     # Calculate entropy and print it
     entropy = _get_entropy(pass_length, chars)
-    msg.Prints.emphasis("\nThe entropy of generated password is: {}".format(entropy))
     if output:
-        output.write("Entropy: {}\n".format(entropy))
+        output.write("\nEntropy: {}".format(entropy))
+    else:
+        msg.Prints.emphasis("\nThe entropy of generated password is: {}".format(entropy))
 
     # Print summary table, only if --verbose or --output
-    msg.Prints.verbose(_password_entropy_table, verbose)
     if output:
         output.write("\n{}".format(_password_entropy_table))
+    else:
+        msg.Prints.verbose(_password_entropy_table, verbose)
 
 
 def _get_char_list(charsets_to_exclude: str = None) -> list:
