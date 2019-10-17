@@ -1,13 +1,13 @@
-#!/usr/bin/env python3
-import click
-import requests
 import hashlib
-import string
 import math
 import random
 import secrets
-import random_password_generator.messages.messages as msg
-from random_password_generator import __version__, __name_desc__
+import string
+
+import click
+import requests
+
+from random_password_generator import messages as msg, version, name_desc
 
 _password_entropy_table = """
 Password strength is determined with this chart:
@@ -29,7 +29,7 @@ _available_charsets = {"l", "u", "d", "p"}
               help="Exclude comma-separated charsets: [l]owercase, [u]ppercase, [d]igits, [p]unctuation.")
 @click.option("--no-safe", is_flag=True, help="Do not check passwords in Have I Been Pwned db.")
 @click.option("-v", "--verbose", "verbose", is_flag=True, help="Print verbose output.")
-@click.version_option(__version__, "-V", "--version", prog_name=__name_desc__)
+@click.version_option(version, "-V", "--version", prog_name=name_desc)
 def rpg(pass_length: int, number: int, output: click.File, exclude_charsets: str, no_safe: bool, verbose: bool) -> None:
     """
     Generate random, entropic, complex and safe password.
@@ -133,7 +133,10 @@ def _get_char_list(charsets_to_exclude: str = None) -> list:
 
     # If charsets is empty, take all charsets
     if not bool(charsets):
-        charsets = _available_charsets
+        if charsets_to_exclude is not None:
+            return chars
+        else:
+            charsets = _available_charsets
 
     for cset in charsets:
         if cset == "l":
@@ -217,7 +220,7 @@ def _is_leaked_password(pw: str) -> int:
     # Query have i been pwned
     try:
         res = requests.get(hibp_api.format(pw_hash_prefix), headers=headers)
-    except Exception:
+    except requests.exceptions.RequestException:
         return 9
 
     # Check if the password is safe
