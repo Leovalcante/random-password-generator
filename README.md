@@ -1,5 +1,5 @@
 # Random Password Generator
-#### *rpg v0.0.1*
+#### *rpg v1.0.1*
 
 ## What is rpg?
 **Rpg** stands for **R**andom **P**assword **G**enerator, it's a utility command line tool that allows you to generate random entropic and safe password. 
