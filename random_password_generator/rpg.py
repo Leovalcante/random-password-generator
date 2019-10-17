@@ -133,7 +133,10 @@ def _get_char_list(charsets_to_exclude: str = None) -> list:
 
     # If charsets is empty, take all charsets
     if not bool(charsets):
-        charsets = _available_charsets
+        if charsets_to_exclude is not None:
+            return chars
+        else:
+            charsets = _available_charsets
 
     for cset in charsets:
         if cset == "l":
