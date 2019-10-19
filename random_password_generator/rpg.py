@@ -178,9 +178,12 @@ def _generate_random_password(length: int, charsets: list, no_safe: bool = False
     # Shuffle chars to change every password generation
     random.shuffle(charsets)
 
+    charset =  [e for cs in charsets for e in cs]
+    random.shuffle(charset)
+
     for i in range(length):
         # Append random char into generated password
-        pw.append(secrets.choice(charsets[i % chars]))
+        pw.append(secrets.choice(charset))
 
     random.shuffle(pw)
     pw = "".join(pw)
