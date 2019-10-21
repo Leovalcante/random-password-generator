@@ -66,7 +66,7 @@ def rpg(pass_length: int, number: int, output: click.File, exclude_charsets: str
         raise click.BadOptionUsage("--exclude-charsets",
                                    msg.Echoes.error("RPG needs at least one charsets type to generate password."))
     else:
-        if not len(chars) == 4:
+        if not len(chars) == 94:
             # User chose to not use any charsets, print warning message
             msg.Prints.warning("You are going to generate passwords without one or more of default charsets!")
             msg.Prints.warning(
@@ -84,7 +84,7 @@ def rpg(pass_length: int, number: int, output: click.File, exclude_charsets: str
     pw_list = []
     with click.progressbar(length=number, label="Generating passwords", show_pos=True) as pw_bar:
         for _ in pw_bar:
-            pw = _generate_random_password(pass_length, chars, no_safe)
+            pw = _generate_random_password(pass_length, list(chars), no_safe)
             if pw is not None:
                 pw_list.append(pw)
             else:
@@ -124,7 +124,7 @@ def _get_char_list(charsets_to_exclude: str = None) -> list:
     :param str charsets_to_exclude: charsets to exclude
     :return list: available charsets list
     """
-    chars = []
+    chars = ""
 
     charsets = {}
     if charsets_to_exclude is not None:
@@ -134,21 +134,21 @@ def _get_char_list(charsets_to_exclude: str = None) -> list:
     # If charsets is empty, take all charsets
     if not bool(charsets):
         if charsets_to_exclude is not None:
-            return chars
+            return list(chars)
         else:
             charsets = _available_charsets
 
     for cset in charsets:
         if cset == "l":
-            chars.append(string.ascii_lowercase)
+            chars += string.ascii_lowercase
         elif cset == "u":
-            chars.append(string.ascii_uppercase)
+            chars += string.ascii_uppercase
         elif cset == "d":
-            chars.append(string.digits)
+            chars += string.digits
         elif cset == "p":
-            chars.append(string.punctuation)
+            chars += string.punctuation
 
-    return chars
+    return list(chars)
 
 
 def _sanitize_excluded_charsets(charsets_to_sanitize: str) -> set:
@@ -163,24 +163,23 @@ def _sanitize_excluded_charsets(charsets_to_sanitize: str) -> set:
     return set_to_sanitize & _available_charsets
 
 
-def _generate_random_password(length: int, charsets: list, no_safe: bool = False):
+def _generate_random_password(length: int, charset: list, no_safe: bool = False):
     """
     Generate random password.
 
     :param int length: password length
-    :param list charsets: available characters to use
+    :param list charset: available characters to use
     :param bool no_safe: should check password in Have I Been Pwned db
     :return: str random password | None
     """
     pw = []
-    chars = len(charsets)
 
     # Shuffle chars to change every password generation
-    random.shuffle(charsets)
+    random.shuffle(charset)
 
     for i in range(length):
         # Append random char into generated password
-        pw.append(secrets.choice(charsets[i % chars]))
+        pw.append(secrets.choice(charset))
 
     random.shuffle(pw)
     pw = "".join(pw)
@@ -189,7 +188,7 @@ def _generate_random_password(length: int, charsets: list, no_safe: bool = False
     if not no_safe:
         leaks = _is_leaked_password(pw)
         if leaks == 1:
-            _generate_random_password(length, charsets)
+            _generate_random_password(length, charset)
         elif leaks == 9:
             return None
 
