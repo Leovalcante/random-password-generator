@@ -3,6 +3,7 @@ import math
 import random
 import secrets
 import string
+from typing import Optional
 
 import click
 import requests
@@ -18,6 +19,9 @@ Password strength is determined with this chart:
 128+ bits\t= Very Strong; often overkill"""
 
 _available_charsets = {"l", "u", "d", "p"}
+_max_pass_length = 50
+_min_pass_length = 12
+_max_pass_number = 50
 
 
 @click.command(context_settings={'help_option_names': ['-h', '--help']})
@@ -44,15 +48,15 @@ def rpg(pass_length: int, number: int, output: click.File, exclude_charsets: str
     :return: None
     """
     # Check pass_length validity
-    msg.Prints.verbose("Checking <pass-length> ({}) validity".format(pass_length), verbose)
-    if pass_length > 90 or pass_length < 12:
+    msg.Prints.verbose(f"Checking <pass-length> ({pass_length}) validity", verbose)
+    if pass_length > _max_pass_length or pass_length < _min_pass_length:
         raise click.BadArgumentUsage(
-            msg.Echoes.error("Invalid value for \"<pass-length>\": {} is not in the valid range of 12 to 90.")
-            .format(pass_length))
+            msg.Echoes.error(
+                f"Invalid value for \"<pass-length>\": {pass_length} is not in the valid range of 12 to 90."))
 
     # Check number validity
-    msg.Prints.verbose("Checking <pass-number> ({}) validity".format(number), verbose)
-    if number > 50:
+    msg.Prints.verbose(f"Checking <pass-number> ({number}) validity", verbose)
+    if number > _max_pass_number:
         raise click.BadOptionUsage("number", msg.Echoes.error(
             "Invalid value for \"<pass-number>\": the maximum value accepted is 50."))
 
@@ -66,7 +70,7 @@ def rpg(pass_length: int, number: int, output: click.File, exclude_charsets: str
         raise click.BadOptionUsage("--exclude-charsets",
                                    msg.Echoes.error("RPG needs at least one charsets type to generate password."))
     else:
-        if not len(chars) == 94:
+        if not len(chars) == len(string.ascii_lowercase + string.ascii_uppercase + string.digits + string.punctuation):
             # User chose to not use any charsets, print warning message
             msg.Prints.warning("You are going to generate passwords without one or more of default charsets!")
             msg.Prints.warning(
@@ -84,7 +88,7 @@ def rpg(pass_length: int, number: int, output: click.File, exclude_charsets: str
     pw_list = []
     with click.progressbar(length=number, label="Generating passwords", show_pos=True) as pw_bar:
         for _ in pw_bar:
-            pw = _generate_random_password(pass_length, list(chars), no_safe)
+            pw = _generate_random_password(pass_length, chars, no_safe)
             if pw is not None:
                 pw_list.append(pw)
             else:
@@ -99,20 +103,20 @@ def rpg(pass_length: int, number: int, output: click.File, exclude_charsets: str
 
     for pw in pw_list:
         if output:
-            output.write("{}\n".format(pw))
+            output.write(f"{pw}\n")
         else:
             msg.Prints.info(pw)
 
     # Calculate entropy and print it
     entropy = _get_entropy(pass_length, chars)
     if output:
-        output.write("\nEntropy: {}".format(entropy))
+        output.write(f"\nEntropy: {entropy}")
     else:
-        msg.Prints.emphasis("\nThe entropy of generated password is: {}".format(entropy))
+        msg.Prints.emphasis(f"\nThe entropy of generated password is: {entropy}")
 
     # Print summary table, only if --verbose or --output
     if output:
-        output.write("\n{}".format(_password_entropy_table))
+        output.write(f"\n{_password_entropy_table}")
     else:
         msg.Prints.verbose(_password_entropy_table, verbose)
 
@@ -163,36 +167,36 @@ def _sanitize_excluded_charsets(charsets_to_sanitize: str) -> set:
     return set_to_sanitize & _available_charsets
 
 
-def _generate_random_password(length: int, charset: list, no_safe: bool = False):
+def _generate_random_password(length: int, charsets: list, no_safe: bool = False) -> Optional[str]:
     """
     Generate random password.
 
     :param int length: password length
-    :param list charset: available characters to use
+    :param list charsets: available characters to use
     :param bool no_safe: should check password in Have I Been Pwned db
     :return: str random password | None
     """
     pw = []
 
     # Shuffle chars to change every password generation
-    random.shuffle(charset)
+    random.shuffle(charsets)
 
     for i in range(length):
         # Append random char into generated password
-        pw.append(secrets.choice(charset))
+        pw.append(secrets.choice(charsets))
 
     random.shuffle(pw)
-    pw = "".join(pw)
+    pw_str = "".join(pw)
 
     # Check if generated password is in a password leak
     if not no_safe:
-        leaks = _is_leaked_password(pw)
+        leaks = _is_leaked_password(pw_str)
         if leaks == 1:
-            _generate_random_password(length, charset)
+            return _generate_random_password(length, charsets)
         elif leaks == 9:
             return None
 
-    return pw
+    return pw_str
 
 
 def _is_leaked_password(pw: str) -> int:
