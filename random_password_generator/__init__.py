@@ -1,5 +1,5 @@
 name = "random-password-generator-cli"
 name_desc = "Random Password Generator"
-version = "1.0.1"
+version = "1.0.2"
 description = "Command line tool utility to generate random entropic password"
 url = "https://github.com/Leovalcante/random-password-generator"
