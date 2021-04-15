@@ -19,7 +19,7 @@ Password strength is determined with this chart:
 128+ bits\t= Very Strong; often overkill"""
 
 _available_charsets = {"l", "u", "d", "p"}
-_max_pass_length = 50
+_max_pass_length = 90
 _min_pass_length = 12
 _max_pass_number = 50
 
@@ -51,8 +51,8 @@ def rpg(pass_length: int, number: int, output: click.File, exclude_charsets: str
     msg.Prints.verbose(f"Checking <pass-length> ({pass_length}) validity", verbose)
     if pass_length > _max_pass_length or pass_length < _min_pass_length:
         raise click.BadArgumentUsage(
-            msg.Echoes.error(
-                f"Invalid value for \"<pass-length>\": {pass_length} is not in the valid range of 12 to 90."))
+            msg.Echoes.error((f"Invalid value for \"<pass-length>\": {pass_length} "
+                              f"is not in the valid range of {_min_pass_length} to {_max_pass_length}.")))
 
     # Check number validity
     msg.Prints.verbose(f"Checking <pass-number> ({number}) validity", verbose)
