@@ -9,7 +9,7 @@ Rpg check by default every single password that generates into [Have I Been Pwne
 
 
 ## Installation
-`pip3 install random-password-genrator-cli`
+`pip3 install random-password-generator-cli`
 
 
 ## Usage
